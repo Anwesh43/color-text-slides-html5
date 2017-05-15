@@ -8,16 +8,14 @@ class Slide {
         this.color = color
         this.title = title
     }
-    draw() {
+    create() {
         const canvas = document.createElement('canvas')
         const context = canvas.getContext('2d')
         const img = document.createElement('img')
         const w = window.innerWidth,h = window.innerHeight
-
-
         canvas.width = w
         canvas.height = h
-        context.font = context.font.replace(/\d{2}/,50)
+        context.font = context.font.replace(/\d{2}/,h/12)
         console.log(context.font)
         var x = w/2 ,y = h/2
         var msg = ""
@@ -46,6 +44,14 @@ class Slide {
         })
         img.src = canvas.toDataURL()
         document.body.appendChild(img)
+        window.onscroll = ()=>{
+          if(window.scrollY >= img.offsetTop) {
+              img.style.position = 'fixed'
+          }
+          else {
+              img.style.position = ''
+          }
+        }
     }
 }
 class TextComponent {
