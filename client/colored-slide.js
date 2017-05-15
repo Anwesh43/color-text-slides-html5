@@ -2,18 +2,22 @@ window.slides = []
 class ColoredSlideFactory {
     static create(color,title) {
         const slide = new Slide(color,title)
-        slide.create()
-        window.slides.push(slide.getImageDom())
+        slide.render()
+        window.slides.push(slide)
     }
     static createParallaxEffect() {
+      window.currDiff = 0
       window.onscroll = ()=>{
-        slides.forEach((img)=>{
-            // if(window.scrollY > img.offsetTop) {
-            //     img.style.position = 'fixed'
-            // }
-            // else {
-            //     img.style.position = ''
-            // }
+        const imgs = slides.map((slide)=>slide.getImageDom())
+        imgs.forEach((img,index)=>{
+            if(window.scrollY > img.offsetTop) {
+                  img.style.backgroundPosition = 'center'
+                  img.style.backgroundAttachment = 'fixed'
+            }
+            else {
+              img.style.backgroundPosition = ''
+              img.style.backgroundAttachment = ''
+            }
             console.log(img.offsetTop)
         })
       }
@@ -24,14 +28,31 @@ class Slide {
     constructor(color,title) {
         this.color = color
         this.title = title
+        this.img = document.createElement('div')
+        document.body.appendChild(this.img)
+        this.fH = window.innerHeight
+        this.time = 0
     }
-    create() {
+    setFinalH(h) {
+        this.fh = h
+        console.log(this.fH)
+        this.render()
+    }
+    resize() {
+        this.time = 0
+        this.render()
+    }
+    render() {
+        if(this.time == 0) {
+            this.fh = window.innerHeight
+        }
         const canvas = document.createElement('canvas')
         const context = canvas.getContext('2d')
-        const img = document.createElement('img')
         const w = window.innerWidth,h = window.innerHeight
         canvas.width = w
-        canvas.height = h
+        canvas.height = this.fh
+        this.img.style.width = w
+        this.img.style.height = h
         context.font = context.font.replace(/\d{2}/,h/12)
         console.log(context.font)
         var x = w/2 ,y = h/2
@@ -54,14 +75,13 @@ class Slide {
         }
         textComponents.push(new TextComponent(msg,x-context.measureText(msg).width/2,y))
         context.fillStyle = this.color
-        context.fillRect(0,0,w,h)
+        context.fillRect(0,0,w,this.fH)
         console.log(textComponents)
         textComponents.forEach((textComponent)=>{
             textComponent.draw(context)
         })
-        img.src = canvas.toDataURL()
-        document.body.appendChild(img)
-        this.img = img
+        this.img.style.backgroundImage = `url(${canvas.toDataURL()})`
+        this.time++
     }
     getImageDom() {
         return this.img
