@@ -7,6 +7,7 @@ class Slide {
     constructor(color,title) {
         this.color = color
         this.title = title
+        this.textComponents = []
     }
     draw() {
         const canvas = document.createElement('canvas')
@@ -17,5 +18,16 @@ class Slide {
         canvas.height = h
         context.fillStyle = this.color
         context.fillRect(0,0,w,h)
+    }
+}
+class TextComoponent {
+    constructor(text,x,y) {
+        this.text = text
+        this.x = x
+        this.y = y
+    }
+    draw(context) {
+        context.fillStyle = 'white'
+        context.fillText(this.text,this.x,this.y)
     }
 }
