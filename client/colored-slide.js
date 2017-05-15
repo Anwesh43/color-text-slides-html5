@@ -29,6 +29,9 @@ class Slide {
                 textComponents.push(textComponent)
                 y += h/10
                 msg = ""
+                if(this.title.charAt(i) != ' ') {
+                    msg = this.title.charAt(i)
+                }
             }
             else {
                 msg = newMsg
