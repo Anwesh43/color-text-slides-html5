@@ -1,7 +1,24 @@
-class ColoredSlides {
-    constructor() {
-        this.slides = []
+window.slides = []
+class ColoredSlideFactory {
+    static create(color,title) {
+        const slide = new Slide(color,title)
+        slide.create()
+        window.slides.push(slide.getImageDom())
     }
+    static createParallaxEffect() {
+      window.onscroll = ()=>{
+        slides.forEach((img)=>{
+            // if(window.scrollY > img.offsetTop) {
+            //     img.style.position = 'fixed'
+            // }
+            // else {
+            //     img.style.position = ''
+            // }
+            console.log(img.offsetTop)
+        })
+      }
+    }
+
 }
 class Slide {
     constructor(color,title) {
@@ -44,14 +61,10 @@ class Slide {
         })
         img.src = canvas.toDataURL()
         document.body.appendChild(img)
-        window.onscroll = ()=>{
-          if(window.scrollY >= img.offsetTop) {
-              img.style.position = 'fixed'
-          }
-          else {
-              img.style.position = ''
-          }
-        }
+        this.img = img
+    }
+    getImageDom() {
+        return this.img
     }
 }
 class TextComponent {
