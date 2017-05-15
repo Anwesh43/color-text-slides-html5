@@ -36,6 +36,8 @@ class Slide {
         textComponents.forEach((textComponent)=>{
             textComponent.draw(context)
         })
+        img.src = canvas.toDataURL()
+        document.body.appendChild(img)
     }
 }
 class TextComoponent {
