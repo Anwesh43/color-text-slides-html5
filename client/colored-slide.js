@@ -13,26 +13,31 @@ class Slide {
         const context = canvas.getContext('2d')
         const img = document.createElement('img')
         const w = window.innerWidth,h = window.innerHeight
-        context.font = context.font.replace(/\d{2}/,h/15)
+
+
         canvas.width = w
         canvas.height = h
+        context.font = context.font.replace(/\d{2}/,50)
+        console.log(context.font)
         var x = w/2 ,y = h/2
         var msg = ""
         const textComponents = []
         for(var i = 0;i<this.title.length;i++) {
             const newMsg = msg + this.title.charAt(i)
-            if(context.measureText(newMsg).w > 0.7*w) {
-                const textComponent = new TextComponent(msg,x-context.measureText(msg).w/2,y)
-                textComponents.pust(textComponent)
+            if(context.measureText(newMsg).width > 0.7*w) {
+                const textComponent = new TextComponent(msg,x-context.measureText(msg).width/2,y)
+                textComponents.push(textComponent)
                 y += h/10
+                msg = ""
             }
             else {
                 msg = newMsg
             }
         }
-        textComponents.push(new TextComoponent(msg,x-context.measureText(msg).w/2,y))
+        textComponents.push(new TextComponent(msg,x-context.measureText(msg).width/2,y))
         context.fillStyle = this.color
         context.fillRect(0,0,w,h)
+        console.log(textComponents)
         textComponents.forEach((textComponent)=>{
             textComponent.draw(context)
         })
@@ -40,7 +45,7 @@ class Slide {
         document.body.appendChild(img)
     }
 }
-class TextComoponent {
+class TextComponent {
     constructor(text,x,y) {
         this.text = text
         this.x = x
